@@ -12,6 +12,7 @@ class Patient(BaseModel):
     married: Annotated[bool, Field(default= None, description= 'Is the patient married or not')]
     allergies: Optional[list[str]] = None
     contact_detail: Dict[str, str]
+    address: Adress
 
 # ......Learn Field validator, Transform value......
     @field_validator('email')
@@ -56,6 +57,21 @@ class Patient(BaseModel):
         bmi = round(self.weight/(self.height**2),2)
         return bmi
 
+# ......Nested Model......
+class Adress(BaseModel):
+    city: str
+    street: str
+    pin: str
+
+address_dict = {'city': 'Bahawalpur', 'street': 'street no 1', 'pin': '98734'}
+address1 = Adress(**address_dict)
+
+
+# ......Patient INFO......
+patient_info = {'name': 'talha', 'email': 'mtalhaimran104@ubl.com', 'linkedin': 'https://www.linkedin.com/in/talha-imran-ai/', 'age': 60, 'height': 55.3, 'weight': 67.5, 'married': True, 'contact_detail': { 'phone': '1233', 'landline': '124321', 'emergency': '0000000'}, 'address': address1}
+
+patient1 = Patient(**patient_info)
+
 
 # ......insert patient data......
 def insert_patient_data(patient: Patient):
@@ -65,22 +81,20 @@ def insert_patient_data(patient: Patient):
 
 # ......Update patient Data......
 def update_patient_data(patient: Patient):
-    print(patient.name)
-    print(patient.email)
-    print(patient.linkedin)
-    print(patient.age)
-    print(patient.height)
-    print(patient.weight)
-    print('BMI', patient.calculate_bmi)
-    print(patient.married)
-    print(patient.allergies)
-    print(patient.contact_detail)
-    print('updated')
+    print('Name =', patient.name)
+    print('Mail =', patient.email)
+    print('Lindedin =',patient.linkedin)
+    print('Age =', patient.age)
+    print('Height =', patient.height)
+    print('Weight =', patient.weight)
+    print('BMI =', patient.calculate_bmi)
+    print('Married =', patient.married)
+    print('Allergies =', patient.allergies)
+    print('Contact_details =', patient.contact_detail)
+    print('Address_pin =', patient.address.pin)
+    print('Data Updated')
 
-# ......Patient INFO......
-patient_info = {'name': 'talha', 'email': 'mtalhaimran104@ubl.com', 'linkedin': 'https://www.linkedin.com/in/talha-imran-ai/', 'age': 60, 'height': 55.3, 'weight': 67.5, 'married': True, 'contact_detail': { 'phone': '1233', 'landline': '124321', 'emergency': '0000000'}}
-
-patient1 = Patient(**patient_info)
 
 update_patient_data(patient1)
 # insert_patient_data(patient1)
+# print(patient1)
