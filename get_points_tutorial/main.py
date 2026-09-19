@@ -3,7 +3,7 @@ import json
 
 app = FastAPI()
 
-def laod_data():
+def load_data():
     with open('patients.json', 'r') as f:
         data = json.load(f)
 
@@ -26,14 +26,14 @@ def about():
 
 @app.get('/view')
 def view():
-    data = laod_data()
+    data = load_data()
 
     return data
 
 @app.get('/patient/{patient_id}')
 def view_patient(patient_id: str = Path(..., description = 'id of patient' , example= 'P001') ):
     # load patient data
-    data = laod_data()
+    data = load_data()
 
     if patient_id in data:
         return data[patient_id]
@@ -51,10 +51,11 @@ def sort_patients(sort_by: str = Query (..., description = 'sort on the basis or
     if order not in ['asc' , 'desc']:
         raise HTTPException(status_code=400, detail = 'Invalid code select between ascending and descending')
 
-    data = laod_data()
+    data = load_data()
 
     sort_order = True if order == 'desc'else False
     sorted_data = sorted(data.values(), key = lambda x: x.get(sort_by, 0), reverse= sort_order)
+    
     return sorted_data
 
 
